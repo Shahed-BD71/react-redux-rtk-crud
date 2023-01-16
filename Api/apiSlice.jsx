@@ -31,6 +31,7 @@ export const apiSlice = createApi({
           body,
         };
       },
+      invalidatesTags: ["Post"],
     }),
     deletePost: builder.mutation({
       query: (id) => ({
