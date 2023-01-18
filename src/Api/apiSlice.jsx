@@ -20,7 +20,7 @@ export const apiSlice = createApi({
           "Content-type": "application/json; charset=UTF-8",
         },
       }),
-      invalidatesTags: ["POST"],
+      invalidatesTags: ["Post"],
     }),
     updatePost: builder.mutation({
       query: (payload) => {
@@ -35,7 +35,7 @@ export const apiSlice = createApi({
     }),
     deletePost: builder.mutation({
       query: (id) => ({
-        url: `/post/${id}`,
+        url: `/posts/${id}`,
         method: "DELETE",
         credentials: "include",
       }),

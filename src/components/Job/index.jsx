@@ -6,7 +6,7 @@ import {
   useUpdatePostMutation
 } from "../../Api/apiSlice";
 
-export const PostList = () => {
+function PostList() {
   const [addNewPost, response] = useAddNewPostMutation();
   const [deletePost] = useDeletePostMutation();
   const [inputField, setInputField] = useState({
@@ -85,30 +85,40 @@ export const PostList = () => {
       </div>
     );
   } else if (isGetSuccess) {
-    postContent = posts.map((item) => {
-      return (
-        <div className="col-lg-12 mb-3" key={item.id}>
-          <div className="card alert alert-secondary">
-            <div className="card-body">
-              <h5 className="card-title">{item.title}</h5>
-              <p className="card-text">{item.body}</p>
-              <button
-                onClick={() => deletePost(item.id)}
-                className="btn btn-outline-danger me-2"
-              >
-                Remove
-              </button>
-              <button
-                onClick={() => setPostData(item)}
-                className="btn btn-outline-primary"
-              >
-                Edit
-              </button>
-            </div>
+    postContent = !posts.length ? (
+      <div className="row">
+        <div className="card alert alert-secondary">
+          <div className="card-body">
+            <h5 className="card-title text-center">No Job Available Now</h5>
           </div>
         </div>
-      );
-    });
+      </div>
+    ) : (
+      posts.map((item) => {
+        return (
+          <div className="col-lg-12 mb-3" key={item.id}>
+            <div className="card alert alert-secondary">
+              <div className="card-body">
+                <h5 className="card-title">{item.title}</h5>
+                <p className="card-text">{item.body}</p>
+                <button
+                  onClick={() => deletePost(item.id)}
+                  className="btn btn-outline-danger me-2"
+                >
+                  Remove
+                </button>
+                <button
+                  onClick={() => setPostData(item)}
+                  className="btn btn-outline-primary"
+                >
+                  Edit
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })
+    );
   } else if (isGetError) {
     postContent = (
       <div className="alert alert-danger" role="alert">
@@ -122,7 +132,7 @@ export const PostList = () => {
         <form onSubmit={onSubmit}>
           <div className="mb-3">
             <label className="form-label">
-              <strong>Enter Title</strong>
+              <h5 className="fw-bold">Enter Title</h5>
             </label>
             <input
               value={inputField.title}
@@ -130,12 +140,13 @@ export const PostList = () => {
               className="form-control"
               name="title"
               id="title"
+              required
               onChange={handleInputs}
             />
           </div>
           <div className="mb-3">
             <label className="form-label">
-              <strong>Enter content</strong>
+              <h5>Enter content</h5>
             </label>
             <textarea
               value={inputField.body}
@@ -143,6 +154,7 @@ export const PostList = () => {
               rows="3"
               name="body"
               id="body"
+              required
               onChange={handleInputs}
             ></textarea>
           </div>
@@ -158,9 +170,10 @@ export const PostList = () => {
           </button>
         </form>
       </div>
-      <div className="col-lg-8">
+      <div className="col-lg-8 px-5">
         <div className="row">{postContent}</div>
       </div>
     </div>
   );
-};
+}
+export default PostList;

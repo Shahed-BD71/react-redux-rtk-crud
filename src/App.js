@@ -1,5 +1,6 @@
 import './App.css';
-import { PostList } from './componets/Job';
+import PostList from './components/Job';
+
 
 function App() {
   return (
