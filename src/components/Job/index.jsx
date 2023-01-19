@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import {
   useAddNewPostMutation,
@@ -9,10 +10,30 @@ import {
 function PostList() {
   const [addNewPost, response] = useAddNewPostMutation();
   const [deletePost] = useDeletePostMutation();
+  const [imageURL, setImageURL] = useState(null);
+  const imageInputRef = React.useRef(); 
+
+  const handleImageUpload = (e) => {
+    console.log(e.target.files[0]);
+    const imageData = new FormData();
+    imageData.set("key", "876935df77e8da04119600203a2323f6");
+    imageData.append("image", e.target.files[0]);
+    axios
+      .post("https://api.imgbb.com/1/upload", imageData)
+      .then(function (response) {
+        setImageURL(response.data.data.display_url);
+        console.log(response.data.data.display_url);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   const [inputField, setInputField] = useState({
     id: "",
     title: "",
-    body: "",
+    description: "",
+    image: imageURL,
   });
   const handleInputs = (e) => {
     setInputField((prev) => ({
@@ -22,11 +43,11 @@ function PostList() {
   };
 
   const [updatePost, { isLoading: isUpdating }] = useUpdatePostMutation();
-  const setPostData = (data) => {
+  const setPostData = (data, imageURL) => {
     setInputField({
       id: data.id,
       title: data.title,
-      body: data.body,
+      description: data.description,
     });
   };
 
@@ -34,38 +55,42 @@ function PostList() {
     updatePost({
       id: inputField.id,
       title: inputField.title,
-      body: inputField.body,
+      description: inputField.description,
     });
     setInputField(() => ({
       id: "",
       title: "",
-      body: "",
+      description: "",
     }));
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const { title, body } = e.target.elements;
+    const { title, description, image } = e.target.elements;
     setInputField((inputField) => ({
       ...inputField,
       [e.target.name]: e.target.value,
     }));
     let formData = {
       title: title.value,
-      body: body.value,
+      description: description.value,
+      image: imageURL,
     };
-    addNewPost(formData)
-      .unwrap()
-      .then(() => {
-        setInputField(() => ({
-          id: "",
-          title: "",
-          body: "",
-        }));
-      })
-      .then((err) => {
-        console.log(err);
-      });
+    formData.image &&
+      addNewPost(formData)
+        .unwrap()
+        .then(() => {
+          imageInputRef.current.value = "";
+          setImageURL(null);
+          setInputField(() => ({
+            id: "",
+            title: "",
+            description: "",
+          }))
+        })
+        .then((err) => {
+          console.log(err);
+        });
   };
   const {
     data: posts,
@@ -76,6 +101,7 @@ function PostList() {
   } = useGetPostsQuery({ refetchOnMountOrArgChange: true });
 
   let postContent;
+  console.log(postContent);
   if (isGetLoading) {
     postContent = (
       <div className="d-flex justify-content-center">
@@ -100,7 +126,8 @@ function PostList() {
             <div className="card alert alert-secondary">
               <div className="card-body">
                 <h5 className="card-title">{item.title}</h5>
-                <p className="card-text">{item.body}</p>
+                <p className="card-text">{item.description}</p>
+                <img src={item.image} alt={item.title}></img>
                 <button
                   onClick={() => deletePost(item.id)}
                   className="btn btn-outline-danger me-2"
@@ -149,14 +176,29 @@ function PostList() {
               <h5>Enter content</h5>
             </label>
             <textarea
-              value={inputField.body}
+              value={inputField.description}
               className="form-control"
-              rows="3"
-              name="body"
-              id="body"
+              rows="6"
+              name="description"
+              id="description"
               required
               onChange={handleInputs}
             ></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="formFile" class="form-label">
+              Default file input example
+            </label>
+            <input
+              class="form-control"
+              value={inputField.imageURL}
+              name="image"
+              required
+              onClick={handleImageUpload}
+              type="file"
+              ref={imageInputRef}
+              id="image"
+            />
           </div>
           <button className="btn btn-danger me-2" type="submit">
             Submit
