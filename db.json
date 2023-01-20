@@ -1,28 +1,3 @@
 {
-  "posts": [
-    {
-      "title": "gbgn",
-      "description": "gngnbgng",
-      "image": "https://i.ibb.co/cYQW8bN/Screenshot-2023-01-17-at-12-10-33-PM.png",
-      "id": 1
-    },
-    {
-      "title": "fbfb",
-      "description": "fbfbfb",
-      "image": "https://i.ibb.co/PYtYzFD/Screenshot-2023-01-04-at-12-23-36-PM.png",
-      "id": 2
-    },
-    {
-      "title": "fbfbfbfb",
-      "description": "bfgngv vv",
-      "image": "https://i.ibb.co/JWYZ9kx/Screenshot-2023-01-06-at-10-33-35-AM.png",
-      "id": 3
-    },
-    {
-      "title": "bfbf",
-      "description": "vfv",
-      "image": "https://i.ibb.co/zFdcCgj/Screenshot-2023-01-04-at-12-55-02-PM.png",
-      "id": 4
-    }
-  ]
+  "posts": []
 }

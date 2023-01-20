@@ -11,7 +11,7 @@ function PostList() {
   const [addNewPost, response] = useAddNewPostMutation();
   const [deletePost] = useDeletePostMutation();
   const [imageURL, setImageURL] = useState(null);
-  const imageInputRef = React.useRef(); 
+  const imageInputRef = React.useRef();
 
   const handleImageUpload = (e) => {
     console.log(e.target.files[0]);
@@ -86,7 +86,7 @@ function PostList() {
             id: "",
             title: "",
             description: "",
-          }))
+          }));
         })
         .then((err) => {
           console.log(err);
@@ -101,7 +101,6 @@ function PostList() {
   } = useGetPostsQuery({ refetchOnMountOrArgChange: true });
 
   let postContent;
-  console.log(postContent);
   if (isGetLoading) {
     postContent = (
       <div className="d-flex justify-content-center">
@@ -125,9 +124,19 @@ function PostList() {
           <div className="col-lg-12 mb-3" key={item.id}>
             <div className="card alert alert-secondary">
               <div className="card-body">
-                <h5 className="card-title">{item.title}</h5>
-                <p className="card-text">{item.description}</p>
-                <img src={item.image} alt={item.title}></img>
+                <div className="row">
+                  <div className="col-md-8">
+                    <h5 className="card-title">{item.title}</h5>
+                    <p className="card-text">{item.description}</p>
+                  </div>
+                  <div className="col-md-4">
+                    <img
+                      className="img-fluid"
+                      src={item.image}
+                      alt={item.title}
+                    ></img>
+                  </div>
+                </div>
                 <button
                   onClick={() => deletePost(item.id)}
                   className="btn btn-outline-danger me-2"
@@ -154,66 +163,68 @@ function PostList() {
     );
   }
   return (
-    <div className="row">
-      <div className="col-md-4 offset-md-*">
-        <form onSubmit={onSubmit}>
-          <div className="mb-3">
-            <label className="form-label">
-              <h5 className="fw-bold">Enter Title</h5>
-            </label>
-            <input
-              value={inputField.title}
-              type="text"
-              className="form-control"
-              name="title"
-              id="title"
-              required
-              onChange={handleInputs}
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">
-              <h5>Enter content</h5>
-            </label>
-            <textarea
-              value={inputField.description}
-              className="form-control"
-              rows="6"
-              name="description"
-              id="description"
-              required
-              onChange={handleInputs}
-            ></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="formFile" class="form-label">
-              Default file input example
-            </label>
-            <input
-              class="form-control"
-              value={inputField.imageURL}
-              name="image"
-              required
-              onClick={handleImageUpload}
-              type="file"
-              ref={imageInputRef}
-              id="image"
-            />
-          </div>
-          <button className="btn btn-danger me-2" type="submit">
-            Submit
-          </button>
-          <button
-            onClick={onEditData}
-            className="btn btn-primary"
-            type="button"
-          >
-            Update
-          </button>
-        </form>
-      </div>
-      <div className="col-lg-8 px-5">
-        <div className="row">{postContent}</div>
+    <div className="container-fluid">
+      <div className="row">
+        <div className="position-fixed col-md-4 col-10 px-md-3 px-1 px-xl-5" id="sticky-sidebar">
+          <form onSubmit={onSubmit}>
+            <div className="mb-3">
+              <label className="form-label">
+                <h5 className="fw-bold">Enter Title</h5>
+              </label>
+              <input
+                value={inputField.title}
+                type="text"
+                className="form-control"
+                name="title"
+                id="title"
+                required
+                onChange={handleInputs}
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">
+                <h5>Enter content</h5>
+              </label>
+              <textarea
+                value={inputField.description}
+                className="form-control"
+                rows="6"
+                name="description"
+                id="description"
+                required
+                onChange={handleInputs}
+              ></textarea>
+            </div>
+            <div className="mb-3">
+              <label htmlFor="formFile" className="form-label">
+                Default file input example
+              </label>
+              <input
+                className="form-control"
+                value={inputField.imageURL}
+                name="image"
+                required
+                onChange={handleImageUpload}
+                type="file"
+                ref={imageInputRef}
+                id="image"
+              />
+            </div>
+            <button className="btn btn-danger me-2" type="submit">
+              Submit
+            </button>
+            <button
+              onClick={onEditData}
+              className="btn btn-primary"
+              type="button"
+            >
+              Update
+            </button>
+          </form>
+        </div>
+        <div className="col-lg-8 col-10 col-md-8 px-5 offset-md-4 offset-5 overflow-hidden" id="main">
+          <div className="row">{postContent}</div>
+        </div>
       </div>
     </div>
   );
